@@ -1,7 +1,6 @@
 import pandas as pd
 import requests
 import json
-from pandas import json_normalize
 
 
 querystring = {"symbol":"AAPL","region":"US"}
@@ -15,9 +14,13 @@ r = requests.get("https://apidojo-yahoo-finance-v1.p.rapidapi.com/stock/v3/get-h
 
 data = json.loads(r.text)
 
-value = pd.json_normalize(data['prices'])
+value = data['prices']
 
-print(value.tail(10))
+df = pd.json_normalize(value)
+df = df.drop(df.columns[[6, 7, 8, 9, 10, 11, 12]], axis=1)
+
+print(df.tail(10))
+
 
 
 
